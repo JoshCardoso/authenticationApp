@@ -17,7 +17,7 @@
                 <p>devcharllenges</p>
                 <h3 class="titulo1">Join thousands of learners from around the world</h3>
                 <p>Master web development by making real-life projects. There are multiple paths for you to choose</p>
-                <form action="./save_user.php" method="post">
+                <form action="../handle_db/save_user.php" method="post">
                     <div class="bkInput">
                         <label for="email">
                             <span class="material-symbols-outlined">

@@ -13,12 +13,12 @@ $statemnet = $connection->query("select * from users where email='$email' and ps
 $result = $statemnet->fetch_assoc();
 $_SESSION = $result;
 
-if($_SESSION === null){
-    header('location: login.php');
-    exit;
-}
-header('location: ../views/usuario.php');
+// if($_SESSION === null){
+//     header('location: ../views/login.php');
+//     exit;
+// }
+// header('location: ../views/usuario.php');
 }else{
-    header('location: login.php');
+    header('location: ../views/login.php');
     exit;
 }

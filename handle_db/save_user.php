@@ -7,18 +7,20 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-$statemnet = $connection->query("select * from users where email='$email' and psswrd='$password'");
+$statement = $connection->prepare('INSERT INTO users (email, psswrd) VALUES (?, ?)');
+$statement->bind_param('ss', $email, $password);
 
-$result = $statemnet->fetch_assoc();
-$_SESSION = $result;
+$email = $_POST['email'];
+$_SESSION['email'] = $email;
+$password = $_POST['password'];
+$_SESSION['password'] = $password;
 
-if($_SESSION === null){
-    header('location: login.php');
-    exit;
+if ($statement->execute()) {
+    echo "Inserção bem-sucedida!";
+    header('location: get_user.php');
+} else {
+    echo "Erro ao inserir os dados: " . $connection->error;
 }
 
-var_dump($_SESSION);
-}else{
-    header('location: login.php');
-    exit;
+$statement->close();
 }
