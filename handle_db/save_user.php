@@ -1,26 +1,33 @@
 <?php
-require_once("conection.php");
-
 session_start();
 
-if(isset($_POST['email']) && isset($_POST['password'])){
-$email = $_POST['email'];
-$password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['email']) && isset($_POST['password'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $email = htmlspecialchars($email, ENT_QUOTES);
+    $password = htmlspecialchars($password, ENT_QUOTES);
 
-$statement = $connection->prepare('INSERT INTO users (email, psswrd) VALUES (?, ?)');
-$statement->bind_param('ss', $email, $password);
+    $hash = password_hash($password, PASSWORD_DEFAULT);
 
-$email = $_POST['email'];
-$_SESSION['email'] = $email;
-$password = $_POST['password'];
-$_SESSION['password'] = $password;
+    require_once("conection.php");
+    $statement = $connection->query("INSERT INTO users(email, psswrd) VALUES ('$email', '$hash');");
 
-if ($statement->execute()) {
-    echo "Inserção bem-sucedida!";
-    header('location: get_user.php');
+    $statemnet = $connection->query("select * from users where email='$email'");
+
+    if ($statemnet->num_rows === 1) {
+        $result = $statemnet->fetch_assoc();
+        $verify = password_verify($password, $hash);
+
+        if ($verify) {
+            session_start();
+            $_SESSION = $result;
+            header('location: ../views/usuario.php');
+        } else {
+            header('location: ../views/login.php');
+        }
+    } else {
+        header('location: ../views/login.php');
+    }
 } else {
-    echo "Erro ao inserir os dados: " . $connection->error;
-}
-
-$statement->close();
+    header('location: ../views/login.php');
 }

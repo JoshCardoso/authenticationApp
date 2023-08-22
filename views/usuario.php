@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+$img = base64_encode($_SESSION['img']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,12 +19,12 @@ session_start();
         <nav>
             <div>devchallenger</div>
             <div class="miniprofile">
-                <img src="" alt="">
+                <?= "<img src='data:image/jpeg;base64 $img' alt='image'>" ?>
                 <p><?= $_SESSION['name'];?></p>
                 <ul>
-                    <li></li>
+                    <li>My Profile</li>
+                    <li>Group Chat</li>
                     <li><a href="../handle_db/logout.php">Logout</a></li>
-                    <li></li>
                 </ul>
             </div>
         </nav>
@@ -37,13 +39,13 @@ session_start();
                         <h2>Profile</h2>
                         <p>Some info may visible to other people</p>
                     </div>
-                    <div class="bEdit"><a href="#">Edit</a></div>
+                    <div class="bEdit"><a href="../views/user_edit.php">Edit</a></div>
                 </div>
                 <div class="list">
                     <div class="category">
                         <p>PHOTO</p>
                     </div>
-                    <div><img src="" alt=""></div>
+                    <div>`<img src="data:image/jpg;base64 $img" alt="">`</div>
                 </div>
                 <div class="list">
                     <div class="category">

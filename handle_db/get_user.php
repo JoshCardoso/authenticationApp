@@ -1,24 +1,30 @@
 <?php
-require_once("conection.php");
 
-session_start();
 
-if(isset($_POST['email']) && isset($_POST['password'])){
+if($_SERVER['REQUEST_METHOD']==="POST" && isset($_POST['email']) && isset($_POST['password'])){
 $email = $_POST['email'];
-$email = htmlspecialchars($email, ENT_QUOTES);
 $password = $_POST['password'];
 
-$statemnet = $connection->query("select * from users where email='$email' and psswrd='$password'");
+require_once("conection.php");
+$statemnet = $connection->query("select * from users where email='$email'");
 
+if($statemnet->num_rows === 1){
 $result = $statemnet->fetch_assoc();
-$_SESSION = $result;
 
-// if($_SESSION === null){
-//     header('location: ../views/login.php');
-//     exit;
-// }
-// header('location: ../views/usuario.php');
+$hash= $result['psswrd'];
+$verify = password_verify($password, $hash);
+
+if($verify){
+session_start();
+$_SESSION = $result;
+header('location: ../views/usuario.php');
+}else{
+    header('location: ../views/login.php');
+}
 }else{
     header('location: ../views/login.php');
     exit;
+}}else{
+    header('location: ../views/login.php');
+exit;
 }

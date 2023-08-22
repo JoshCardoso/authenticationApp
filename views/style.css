@@ -110,3 +110,10 @@ section > div:first-child{
     display: flex;
     align-items: center;
 }
+.name {
+    width: 100px;
+}
+
+.imagem {
+    display: flex;
+}
